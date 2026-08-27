@@ -1,0 +1,57 @@
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 p-4">
+    <!-- Tarjeta del Login estilizada con Tailwind y Angular Material [1] -->
+    <mat-card class="w-full max-w-md p-8 bg-white rounded-2xl shadow-xl border border-slate-100">
+
+        <div class="text-center mb-8">
+            <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">¡Bienvenido!</h2>
+            <p class="text-slate-500 text-sm mt-2">Inicia sesión para acceder al sistema</p>
+        </div>
+
+        <!-- Mostrar alerta de error condicionalmente con el moderno Control Flow de Angular [2, 3] -->
+        @if (errorMessage()) {
+        <div
+            class="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm mb-6 flex items-center gap-2">
+            <span class="font-medium">Error:</span> {{ errorMessage() }}
+        </div>
+        }
+
+        <form (submit)="onLogin($event)" class="flex flex-col gap-4">
+
+            <!-- Campo de Entrada para el Email [1] -->
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Correo electrónico</mat-label>
+                <input matInput type="email" placeholder="correo@ejemplo.com" [value]="username()"
+                    (input)="username.set($any($event.target).value)" required />
+            </mat-form-field>
+
+            <!-- Campo de Entrada para la Contraseña [1] -->
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Contraseña</mat-label>
+                <input matInput type="password" [value]="password()" (input)="password.set($any($event.target).value)"
+                    required />
+            </mat-form-field>
+
+            <!-- Botón de Envío interactivo controlado por el estado de carga [1] -->
+            <button mat-raised-button color="primary" type="submit" [disabled]="isLoading()"
+                class="w-full py-6 mt-4 !rounded-xl text-base font-semibold shadow-md transition duration-150 ease-in-out">
+
+                <!-- Evaluamos el estado con Control Flow nativo [2, 3] -->
+                @if (isLoading()) {
+                <span class="flex items-center justify-center gap-2">
+                    <!-- Spinner animado con Tailwind -->
+                    <svg class="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                        </circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z">
+                        </path>
+                    </svg>
+                    Verificando...
+                </span>
+                } @else {
+                <span>Ingresar</span>
+                }
+            </button>
+
+        </form>
+    </mat-card>
+</div>
