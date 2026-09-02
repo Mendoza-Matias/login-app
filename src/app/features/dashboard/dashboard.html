@@ -1,0 +1,33 @@
+<div class="min-h-screen bg-slate-50 flex flex-col">
+  <!-- Barra de navegación superior -->
+  <nav class="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center shadow-sm">
+    <span class="text-xl font-bold text-slate-800">Mi Sistema Angular</span>
+    <button mat-stroked-button color="warn" (click)="logout()" class="!rounded-lg">
+      Cerrar Sesión
+    </button>
+  </nav>
+
+  @if (isAdmin()) {
+  <h2>Es administrador</h2>
+  }
+
+   @if (isEmployee()) {
+  <h2>Es empleado</h2>
+  }
+
+  <!-- Contenido Principal -->
+  <main class="flex-1 flex flex-col items-center justify-center p-6 text-center">
+    <div class="max-w-md bg-white p-8 rounded-2xl shadow-md border border-slate-100">
+      <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+      </div>
+      <h1 class="text-2xl font-extrabold text-slate-800">¡Acceso Concedido!</h1>
+      <p class="text-slate-500 mt-2">
+        Has iniciado sesión correctamente. Este es tu componente de Dashboard, listo para que agregues toda la lógica de
+        tu sistema.
+      </p>
+    </div>
+  </main>
+</div>
