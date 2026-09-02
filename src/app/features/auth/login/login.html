@@ -20,7 +20,7 @@
             <!-- Campo de Entrada para el Email [1] -->
             <mat-form-field appearance="outline" class="w-full">
                 <mat-label>Correo electrónico</mat-label>
-                <input matInput type="email" placeholder="correo@ejemplo.com" [value]="username()"
+                <input matInput type="text" placeholder="correo@ejemplo.com" [value]="username()"
                     (input)="username.set($any($event.target).value)" required />
             </mat-form-field>
 

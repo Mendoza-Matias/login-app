@@ -4,9 +4,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { Auth } from '../../../core/services/auth';
-import { email } from '@angular/forms/signals';
-import { Store } from '../../../core/services/store';
+import { Router } from '@angular/router';
+import { SessionService } from '../../../core/services/session.service';
+import { ErrorMessageService } from '../../../core/services/error-message.service';
 
 @Component({
   imports: [
@@ -22,8 +22,10 @@ import { Store } from '../../../core/services/store';
 })
 export class Login {
 
-  private authService = inject(Auth);
-  private storeService = inject(Store);
+  private session = inject(SessionService);
+  private router = inject(Router);
+  private errorMessages = inject(ErrorMessageService);
+
 
   //manejador de estado
   username = signal('');
@@ -34,7 +36,7 @@ export class Login {
   onLogin(event: Event) {
     event.preventDefault();
 
-    if (!this.username() || !this.password) {
+    if (!this.username() || !this.password()) {
       this.errorMessage.set('Por favor, completa todos los campos.')
       return;
     }
@@ -42,26 +44,17 @@ export class Login {
     this.isLoading.set(true);
     this.errorMessage.set('');
 
-    // setTimeout(() => {
-    //   this.isLoading.set(false)
-
-    //   if (this.username() === 'employee@gmail.com' && this.password() === '12345') {
-    //     alert('¡Inicio de sesión exitoso!')
-
-    //   } else {
-    //     this.errorMessage.set('Credenciales incorrectas.');
-    //   }
-    // }, 1500)
-    this.authService.login(this.username(), this.password()).subscribe({
-      next: (response) => {
-        this.isLoading.set(false)
-        alert(`¡Bienvenido de nuevo, ${response.name}!`);
-        this.storeService.set("accessToken", response.name) //seteo el token
-      },
-      error: (err) => {
+    this.session.login({ username: this.username(), password: this.password() }).subscribe({
+      next: () => {
         this.isLoading.set(false);
-        this.errorMessage.set(`Error al conectar con el servidor. Inténtalo de nuevo. ${err.message}`);
-      }
-    })
+        void this.router.navigate(['/dashboard']);
+      },
+      error: (error: unknown) => {
+        this.isLoading.set(false);
+        this.errorMessage.set(
+          this.errorMessages.getMessage(error, 'No se pudo iniciar sesión. Inténtalo de nuevo.'),
+        );
+      },
+    });
   }
 }

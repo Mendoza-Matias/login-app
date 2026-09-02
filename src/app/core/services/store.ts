@@ -11,4 +11,8 @@ export class Store {
         const item = localStorage.getItem(key);
         return item ? JSON.parse(item) : null;
     }
+
+    clear(key: string) {
+        localStorage.removeItem(key);
+    }
 }
